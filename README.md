@@ -333,7 +333,7 @@ In this case the regular expression is defining an OR match, meaning it would ma
 
 ### Match Modes
 
-By default, LogAlert only pays attention to **additions** made to your monitored files.  Meaning, it is keeping track of the file sizes, and only examining content that is appended to them.  This makes sense for monitoring things like log files, or possibly CSV files that are progressively written to.  However, LogAlert has another mode which can examine the **entire file's contents** on every change.  This is activated by including a `mode` property in your monitors, and setting it to `"whole"`.  Example:
+By default, LogAlert only pays attention to *additions* made to your monitored files.  Meaning, it keeps track of the file sizes, and only examines content that is appended to them.  This makes sense for monitoring things like log files, or possibly CSV files that are progressively written to.  However, LogAlert has another mode which can examine the **entire file's contents** on every change.  This is activated by including a `mode` property in your monitors, and setting it to `"whole"`.  Example:
 
 ```json
 "mode": "whole"
