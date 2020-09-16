@@ -1,0 +1,38 @@
+{
+	"name": "logalert",
+	"version": "1.0.0",
+	"description": "Monitor logs and send alerts on specific changes.",
+	"author": "Joseph Huckaby <jhuckaby@gmail.com>",
+	"homepage": "https://github.com/jhuckaby/logalert",
+	"license": "MIT",
+	"main": "index.js",
+	"bin": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jhuckaby/logalert"
+	},
+	"bugs": {
+		"url": "https://github.com/jhuckaby/logalert/issues"
+	},
+	"keywords": [
+		"monitor"
+	],
+	"scripts": {
+		"package": "mkdir -p dist && pkg --targets node12-linux-x64,node12-macos-x64,node12-win-x64 --out-path dist .",
+		"boot": "pixl-boot install --script index.js",
+		"unboot": "pixl-boot uninstall",
+		"start": "node index.js start",
+		"stop": "node index.js stop"
+	},
+	"dependencies": {
+		"daemon": "1.1.0",
+		"pixl-cli": "^1.0.0",
+		"pixl-request": "^1.0.31",
+		"pixl-mail": "^1.0.0",
+		"pixl-logger": "^1.0.0",
+		"pixl-boot": "^2.0.0"
+	},
+	"devDependencies": {
+		"pkg": "4.4.9"
+	}
+}

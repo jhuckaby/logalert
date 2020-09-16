@@ -1,0 +1,8 @@
+.gitignore
+node_modules/
+dist/
+work/
+log.txt
+config.json
+pid.txt
+test.txt
