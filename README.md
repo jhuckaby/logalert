@@ -5,6 +5,7 @@
 	* [Features](#features)
 - [Installation](#installation)
 - [Configuration](#configuration)
+	* [Hot Reloading](#hot-reloading)
 	* [Monitors](#monitors)
 	* [Mail Settings](#mail-settings)
 	* [Twilio Settings](#twilio-settings)
