@@ -95,7 +95,7 @@ It is highly recommended that you create a dedicated folder for this, as it writ
 C:\Users\MyUser\LogAlert\
 ```
 
-Place the EXE into your newly-created folder, and double-click it.  On first launch a sample configuration JSON file is created for you, which will be saved into the same folder with filename `config.json`.  You will need a text editor to edit the file, such as NOTEPAD.EXE.  Right-click on the JSON file to "Open With" the editor application of your choice.
+Place the EXE into your newly-created folder, and double-click it.  On first launch a sample configuration JSON file is created for you, which will be saved into the same folder with filename `config.json`.  You will need a text editor to edit the file, such as `NOTEPAD.EXE`.  Right-click on the JSON file to "Open With" the editor application of your choice.
 
 To set LogAlert to automatically startup on boot, see [this guide](https://www.lifewire.com/add-startup-programs-on-windows-10-4801897).
 
@@ -142,11 +142,15 @@ Here are all the top-level properties you can define in the `config.json` file:
 | `log_file` | String | Optionally specify a custom log file location.  See [Logging](#logging) below. |
 | `log_columns` | Array | Optionally customize the log columns.  See [Logging](#logging) below. |
 
-LogAlert will automatically reload its configuration file if you make changes while it is running.  Just make sure to monitor the console (Terminal window) for any errors!
-
-Note that JSON is rather strict with its syntax.  You must make sure that all curly braces and brackets are balanced, all quotes are doubled, and there are no trailing commas.  If you have trouble, it may help to use a text editor with JSON validation features, such as [Atom](https://atom.io/).
+Note that JSON is rather strict with its syntax.  You must make sure that all curly braces and brackets are balanced, all quotes are doubled, and there are no trailing commas.  If you have trouble formatting the file, it may help to use a text editor with JSON validation features, such as [Atom](https://atom.io/) (free).
 
 **Note for Windows Users**: File paths on Windows use backslashes, and these must be "escaped" in JSON strings.  Meaning, a path like `c:\Users\MyUser\MyFile.txt` must be written in JSON with double-backslashes like this: `c:\\Users\\MyUser\\MyFile.txt`.
+
+## Hot Reloading
+
+LogAlert will automatically reload its configuration file if you make changes while it is running.  It checks the file at the same frequency as it monitors your files for changes.  Just make sure to monitor the console (Terminal window) for any errors!
+
+Note that when the configuration is hot-reloaded, it resets the internal state.  This means that things like the number of alerts fired per hour is reset to zero, and the position inside each file for tracking appended content is reset to the current length.  In essence, it performs an internal soft restart, similar to if you closed and reopened the app.
 
 ## Monitors
 
@@ -249,7 +253,7 @@ Once this is configured, you can simply add an `sms` property into your monitor 
 
 ## Other Settings
 
-There are a few miscellaneous settings at the bottom of the `config.json` file.  Here is an example of these:
+There are a few miscellaneous settings at the bottom of the `config.json` file.  Here is what these look like:
 
 ```json
 "sleep": 5,
@@ -318,7 +322,7 @@ LogAlert needs to be told how to identify an alert in your files.  This is done 
 "match": "ALERT"
 ```
 
-This would trigger an alert when the keyword `ALERT` appeared in the monitored file.  Note that the text is matched case-sensitively, so if the word `alert` or `Alert` appeared in the file, it would not trigger.  For more complicated matching options, see below.
+This would trigger an alert when the keyword `ALERT` appeared in the monitored file.  Note that the text is matched **case-sensitively**, so if the word `alert` or `Alert` appeared in the file, it would **not** trigger.  For more complicated matching options, see below.
 
 ### Regular Expressions
 
@@ -529,7 +533,7 @@ You can customize the location and filename of the log file by including a top-l
 
 # Development
 
-You can install the LogAlert source code by using [Git](https://en.wikipedia.org/wiki/Git) ([Node.js](https://nodejs.org/) is also required):
+You can install the LogAlert source code by using [Git](https://en.wikipedia.org/wiki/Git) (you'll also need to have [Node.js](https://nodejs.org/) installed):
 
 ```
 git clone https://github.com/jhuckaby/logalert.git
