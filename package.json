@@ -1,6 +1,6 @@
 {
 	"name": "logalert",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Monitor logs and send alerts on specific changes.",
 	"author": "Joseph Huckaby <jhuckaby@gmail.com>",
 	"homepage": "https://github.com/jhuckaby/logalert",
