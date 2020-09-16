@@ -1,6 +1,34 @@
 <details><summary>Table of Contents</summary>
 
 <!-- toc -->
+- [Overview](#overview)
+	* [Features](#features)
+- [Installation](#installation)
+- [Configuration](#configuration)
+	* [Monitors](#monitors)
+	* [Mail Settings](#mail-settings)
+	* [Twilio Settings](#twilio-settings)
+	* [Other Settings](#other-settings)
+- [Usage](#usage)
+	* [Single File](#single-file)
+	* [Multiple Files](#multiple-files)
+	* [Line Matching](#line-matching)
+		+ [Regular Expressions](#regular-expressions)
+		+ [Match Modes](#match-modes)
+			- [Checksums](#checksums)
+	* [Spin Control](#spin-control)
+		+ [Max Lines](#max-lines)
+		+ [Max Alerts Per Hour](#max-alerts-per-hour)
+		+ [Poll Frequency](#poll-frequency)
+	* [Email Alerts](#email-alerts)
+		+ [Custom Email Template](#custom-email-template)
+	* [SMS Alerts](#sms-alerts)
+		+ [Custom SMS Template](#custom-sms-template)
+	* [Web Hook Alerts](#web-hook-alerts)
+	* [Shell Exec Alerts](#shell-exec-alerts)
+- [Logging](#logging)
+- [Development](#development)
+- [License (MIT)](#license-mit)
 
 </details>
 
