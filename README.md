@@ -143,7 +143,7 @@ Here are all the top-level properties you can define in the `config.json` file:
 | `verbose` | Number | **(Required)** Set the log verbosity from `1` (quietest) to `3` (loudest).  See [Logging](#logging) below. |
 | `color` | Boolean | Optionally enable ANSI color in the LogAlert output.  See [Misc Settings](#misc-settings) below. |
 | `mail_settings` | Object | Optionally configure your mail host for sending e-mail.  See [Mail Settings](#mail-settings) below. |
-| `twilio_settings` | Object | Optionally configure your mail host for sending e-mail.  See [Twilio Settings](#twilio-settings) below. |
+| `twilio_settings` | Object | Optionally configure settings for sending direct SMS messages.  See [Twilio Settings](#twilio-settings) below. |
 | `log_file` | String | Optionally specify a custom log file location.  See [Logging](#logging) below. |
 | `log_columns` | Array | Optionally customize the log columns.  See [Logging](#logging) below. |
 
