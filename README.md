@@ -9,7 +9,7 @@
 	* [Monitors](#monitors)
 	* [Mail Settings](#mail-settings)
 	* [Twilio Settings](#twilio-settings)
-	* [Other Settings](#other-settings)
+	* [Misc Settings](#misc-settings)
 - [Usage](#usage)
 	* [Single File](#single-file)
 	* [Multiple Files](#multiple-files)
@@ -17,7 +17,7 @@
 		+ [Regular Expressions](#regular-expressions)
 		+ [Match Modes](#match-modes)
 			- [Checksums](#checksums)
-	* [Spin Control](#spin-control)
+	* [Flood Control](#flood-control)
 		+ [Max Lines](#max-lines)
 		+ [Max Alerts Per Hour](#max-alerts-per-hour)
 		+ [Poll Frequency](#poll-frequency)
@@ -27,6 +27,7 @@
 		+ [Custom SMS Template](#custom-sms-template)
 	* [Web Hook Alerts](#web-hook-alerts)
 	* [Shell Exec Alerts](#shell-exec-alerts)
+	* [Complete Example](#complete-example)
 - [Logging](#logging)
 - [Development](#development)
 - [License (MIT)](#license-mit)
@@ -45,11 +46,13 @@ LogAlert is shipped as a precompiled binary for Linux, macOS and Windows, and th
 - Monitor multiple logs at a time with different match criteria and different e-mail addresses.
 - Can handle log files with date/time stamps in their filenames / directories.
 - Designed to use very little memory and CPU.
-- Spin control prevents alert flooding.
+- Flood control prevents alert spamming.
 - Pre-compiled binary executables with no external requirements.
 - JSON configuration file.
 
 # Installation
+
+*(Click each section to expand)*
 
 <details><summary><strong>Linux / macOS</strong></summary>
 
@@ -128,16 +131,17 @@ LogAlert is configured via a JSON text file named `config.json`.  A sample file 
 }
 ```
 
-As you can see, the file is split up into sections.  There is a list `monitors` (see [Monitors](#monitors) below), a section for `mail_settings` (see [Mail Settings](#mail-settings) below), and some additional properties at the bottom (see [Other Settings](#other-settings) below).
+As you can see, the file is split up into sections.  There is a list `monitors` (see [Monitors](#monitors) below), a section for `mail_settings` (see [Mail Settings](#mail-settings) below), and some additional properties at the bottom (see [Misc Settings](#misc-settings) below).
 
 Here are all the top-level properties you can define in the `config.json` file:
 
 | Property Name | Type | Description |
 |---------------|------|-------------|
 | `monitors` | Array | **(Required)** A list of all the monitors you want to define.  See [Monitors](#monitors) below. |
-| `sleep` | Number | **(Required)** The number of seconds to sleep between file checks.  See [Other Settings](#other-settings) below. |
+| `sleep` | Number | **(Required)** The number of seconds to sleep between file checks.  See [Misc Settings](#misc-settings) below. |
 | `echo` | Boolean | **(Required)** Set this to `true` to output all log entries to the console, or `false` to run quiet.  See [Logging](#logging) below. |
 | `verbose` | Number | **(Required)** Set the log verbosity from `1` (quietest) to `3` (loudest).  See [Logging](#logging) below. |
+| `color` | Boolean | Optionally enable ANSI color in the LogAlert output.  See [Misc Settings](#misc-settings) below. |
 | `mail_settings` | Object | Optionally configure your mail host for sending e-mail.  See [Mail Settings](#mail-settings) below. |
 | `twilio_settings` | Object | Optionally configure your mail host for sending e-mail.  See [Twilio Settings](#twilio-settings) below. |
 | `log_file` | String | Optionally specify a custom log file location.  See [Logging](#logging) below. |
@@ -252,14 +256,15 @@ Twilio provides you with a `sid` and an `auth` key for authorizing the use of th
 
 Once this is configured, you can simply add an `sms` property into your monitor configurations, and set it to one or more mobile numbers (comma-separated) to send out SMS alerts.
 
-## Other Settings
+## Misc Settings
 
 There are a few miscellaneous settings at the bottom of the `config.json` file.  Here is what these look like:
 
 ```json
 "sleep": 5,
 "echo": true,
-"verbose": 3
+"verbose": 3,
+"color": false
 ```
 
 The `sleep` property controls how frequently LogAlert polls your files for changes, in seconds.  It defaults to 5 seconds, but you can set it to any number you want.  Lower numbers mean it will react to changes more quickly, but it has to hit your hard disk more frequently, so keep that in mind.
@@ -267,6 +272,8 @@ The `sleep` property controls how frequently LogAlert polls your files for chang
 The `echo` property controls whether LogAlert emits information to the console (or Terminal window), so you can see what is happening without having to open its log file.  This defaults to `true`.  Set this to `false` to run quietly and not emit any information to the console.
 
 The `verbose` property controls the logging level.  Lower numbers like `1` mean that it will only log when alerts fire, whereas `2` and `3` are increasingly verbose, meaning that LogAlert will emit additional information about what is happening.  See [Logging](#logging) below for more details.
+
+The `color` property enables ANSI color output for LogAlert in the console (Terminal window).  This defaults to `false` (disabled).  Set to `true` to enable color output.  Please make sure your Terminal supports ANSI color before enabling this, as it can cause undesired effects.
 
 # Usage
 
@@ -357,9 +364,9 @@ When using `whole` mode (see above), LogAlert has an optional feature which can 
 
 The checksum feature only has effect when using `whole` file mode.
 
-## Spin Control
+## Flood Control
 
-LogAlert has several ways to manage "spin control".  That is, to control a flood of alerts that may happen.  For example, if your system goes haywire and appends 10,000 alert-triggering lines to your monitored file, you certainly don't want 10,000 e-mails being sent!  These features assist with managing spin control situations.
+LogAlert has several ways to manage "flood control".  That is, to control a flood of alerts that may happen.  For example, if your system goes haywire and appends 10,000 alert-triggering lines to your monitored file, you certainly don't want 10,000 e-mails being sent!  These features assist with managing flood situations.
 
 ### Max Lines
 
@@ -373,7 +380,7 @@ This property must be configured per each monitor.
 
 ### Max Alerts Per Hour
 
-You can also limit the maximum number of alerts to allow per hour.  This is a great way to manage spin control, as you can set this to a very low number, including as low as `1` per hour.  Then, whatever happens during the hour, it will **not** send out another alert, even if the file blows up.  To use this feature, include a `max_per_hour` property, and set it to the maximum number of alerts you want to allow per hour:
+You can also limit the maximum number of alerts to allow per hour.  This is a great way to manage flood control, as you can set this to a very low number, including as low as `1` per hour.  Then, whatever happens during the hour, it will **not** send out another alert, even if the file blows up.  To use this feature, include a `max_per_hour` property, and set it to the maximum number of alerts you want to allow per hour:
 
 ```json
 "max_per_hour": 3
@@ -383,7 +390,7 @@ This property must be configured per each monitor.
 
 ### Poll Frequency
 
-Finally, you can limit the poll frequency, to check for file changes at a slower rate (i.e. a longer sleep delay between checks).  The default poll frequency is 5 seconds.  If you don't need LogAlert to respond to alerts that quickly, it is recommended that you increase this value.  To do this, set the `sleep` property to a different value (specified in seconds).  Example:
+Finally, you can limit the poll frequency, to check for file changes at a slower rate (i.e. a longer sleep delay between checks).  The default poll frequency is 5 seconds.  If you don't need LogAlert to respond to alerts that quickly, it is recommended that you increase this value.  To do this, set the `sleep` property to a higher value (specified in seconds).  Example (check every minute):
 
 ```json
 "sleep": 60
@@ -515,6 +522,58 @@ LogAlert can optionally execute a local shell command on each alert.  This can b
 ```
 
 On Linux and macOS, the `/bin/sh` shell is used.  On Windows, `CMD.EXE` is used.
+
+## Complete Example
+
+Here is a complete example configuration showing every feature and option:
+
+```json
+{
+	"monitors": [
+		{
+			"name": "Test Monitor",
+			"path": "/Users/me/logalert/*.txt",
+			"match": "ALERT|ERROR",
+			"regexp": true,
+			"mode": "whole",
+			"checksum": true,
+			
+			"email": "jhuckaby@gnail.com, rrussell@fmail.com",
+			"email_template": "To: [email]\nFrom: [from]\nSubject: LogAlert for [name]: [file]\nImportance: high\n\nLogAlert Name: [name]\nDate/Time: [date]\nHostname: [hostname]\nFile Path: [file]\n\nMatched Lines:\n[lines]\n\nEnd of alert.\n",
+			
+			"sms": "+18885551212, +17078773411",
+			"sms_template": "LogAlert: [name]: [file]\n\n[lines]\n",
+			
+			"url": "http://myserver.com/scripts/my-alert-script.php",
+			"exec": "/usr/bin/afplay /path/to/sound.wav",
+			
+			"max_lines": 50,
+			"max_per_hour": 3
+		}
+	],
+	"mail_settings": {
+		"host": "mail.mcn.org",
+		"port": 587,
+		"secure": false,
+		"auth": {
+			"user": "jsmith",
+			"pass": "********"
+		},
+		"from": "jsmith@mcn.org"
+	},
+	"twilio_settings": {
+		"sid": "c2d0e2446335350c6cada99782d32c3a",
+		"auth": "1b74dad8cc27b61347829743327b2e20",
+		"from": "+18885551212"
+	},
+	"sleep": 5,
+	"echo": true,
+	"verbose": 9,
+	"color": true
+}
+```
+
+Notice that you can configure multiple actions per alert.  In the above example, an e-mail, an SMS, a URL request and a shell command are all executed as part of each alert.
 
 # Logging
 
