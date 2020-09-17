@@ -180,7 +180,7 @@ The `monitors` section is where you describe the file(s) you want to watch, and 
 
 The above configuration defines two different monitors:
 
-- The first watches a single file (`/Users/me/logalert/test.txt`), and looks for any appended lines that contain the phrase `ALERT`.  If found, an e-mail is dispatched to `myemail@server.com`.
+- The first monitor watches a single file (`/Users/me/logalert/test.txt`), and looks for any appended lines that contain the phrase `ALERT`.  If found, an e-mail is dispatched to `myemail@server.com`.
 - The second monitor watches **all files** in the `/some/other/path/` folder.  This is denoted by the asterisk wildcard (`*`).  It scans all the files for additions that match `ERROR`, and if found, an SMS message is dispatched to `+1888555122`.
 
 Here are all the properties you can define for each monitor:
