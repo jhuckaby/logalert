@@ -155,11 +155,11 @@ Note that JSON is rather strict with its syntax.  You must make sure that all cu
 
 LogAlert will automatically reload its configuration file if you make changes while it is running.  It checks the file at the same frequency as it monitors your files for changes.  Just make sure to check the console (Terminal window) for any errors!
 
-Note that when the configuration is hot-reloaded, it resets the internal state.  This means that things like the number of alerts fired per hour is reset to zero, and the position inside each file for tracking appended content is reset to the current length.  In essence, it performs an internal "soft restart", similar to if you closed and reopened the app.
+Note that when the configuration is hot-reloaded, it resets the internal state.  This means that things like the number of alerts fired per hour is reset to zero, and the position inside each file for tracking appended content is reset to the current length.  In essence, it performs an internal "soft restart", similar to if you quit and relaunched the app.
 
 ## Monitors
 
-The `monitors` section is where you describe the file(s) you want to watch, and how to detect an alert on changes.  The section is an array (a list) so you can define multiple monitors for different files or folders, each with different settings.  Each additional monitor should be separated by a comma.  Here is an example containing two monitors:
+The `monitors` section is where you describe the file(s) you want to watch, and tell it how to detect an alert.  The section is an array (a list) so you can define multiple monitors for different files or folders, each with its own settings.  Additional monitors should be separated by commas.  Here is an example containing two monitors:
 
 ```json
 "monitors": [
@@ -178,7 +178,10 @@ The `monitors` section is where you describe the file(s) you want to watch, and 
 ],
 ```
 
-The above configuration defines two different monitors.  The first watches a single file (`/Users/me/logalert/test.txt`), and looks for any appended lines that contain the phrase `ALERT`.  If found, an e-mail is dispatched to `myemail@server.com`.  The second monitor watches **all files** in the `/some/other/path/` folder.  This is denoted by the asterisk wildcard (`*`).  It scans all the files for additions that match `ERROR`, and if found, an SMS message is dispatched to `+1888555122`.
+The above configuration defines two different monitors:
+
+- The first watches a single file (`/Users/me/logalert/test.txt`), and looks for any appended lines that contain the phrase `ALERT`.  If found, an e-mail is dispatched to `myemail@server.com`.
+- The second monitor watches **all files** in the `/some/other/path/` folder.  This is denoted by the asterisk wildcard (`*`).  It scans all the files for additions that match `ERROR`, and if found, an SMS message is dispatched to `+1888555122`.
 
 Here are all the properties you can define for each monitor:
 
@@ -201,7 +204,7 @@ Here are all the properties you can define for each monitor:
 
 ## Mail Settings
 
-If you want to send e-mails for your alerts, you'll need to configure the `mail_settings` object.  This generally points at a SMTP server, but you can have it launch a local sendmail binary as well.  These options are passed directly to [nodemailer](https://nodemailer.com/smtp/), so please see their docs for full details.  Here is an example of using SMTP running on localhost:
+If you want to send e-mails for your alerts, you'll need to configure the `mail_settings` object.  This generally points at a SMTP server, but you can have it launch a local [sendmail](https://en.wikipedia.org/wiki/Sendmail) binary as well.  These options are passed directly to [nodemailer](https://nodemailer.com/smtp/), so please see their docs for full details.  Here is an example of using SMTP running on localhost:
 
 ```json
 "mail_settings": {
@@ -212,7 +215,7 @@ If you want to send e-mails for your alerts, you'll need to configure the `mail_
 },
 ```
 
-For using local sendmail via the command-line:
+Here is how to use local sendmail via the command-line:
 
 ```json
 "mail_settings": {
@@ -238,7 +241,7 @@ Note that many SMTP servers require authentication.  This is done by specifying 
 },
 ```
 
-Once this is configured, you can simply add an `email` property into your monitor configurations, and set it to one or more email addresses (comma-separated) to send out e-mail alerts.
+Once this is configured, you can simply add an `email` property into your monitor configurations, and set it to one or more email addresses (comma-separated) to send out e-mail alerts.  See [Email Alerts](#email-alerts) below.
 
 ## Twilio Settings
 
@@ -254,7 +257,7 @@ If you want to send direct SMS messages for your alerts, you will need to config
 
 Twilio provides you with a `sid` and an `auth` key for authorizing the use of their API.  Also, make sure to set the `from` property to your official Twilio-assigned phone number.
 
-Once this is configured, you can simply add an `sms` property into your monitor configurations, and set it to one or more mobile numbers (comma-separated) to send out SMS alerts.
+Once this is configured, you can simply add an `sms` property into your monitor configurations, and set it to one or more mobile numbers (comma-separated) to send out SMS alerts.  See [SMS Alerts](#sms-alerts) below.
 
 ## Misc Settings
 
@@ -269,7 +272,7 @@ There are a few miscellaneous settings at the bottom of the `config.json` file. 
 
 The `sleep` property controls how frequently LogAlert polls your files for changes, in seconds.  It defaults to `5` seconds, but you can set it to any number you want.  Lower numbers mean it will react to changes more quickly, but it has to hit your hard disk more frequently, so keep that in mind.
 
-The `echo` property controls whether LogAlert emits information to the console (or Terminal window), so you can see what is happening without having to open its log file.  This defaults to `true`.  Set this to `false` to run quietly and not emit any information to the console.
+The `echo` property controls whether LogAlert emits information to the console (or Terminal window), so you can see what is happening without having to read its log file.  This defaults to `true`.  Set this to `false` to run quietly and not emit any information to the console.
 
 The `verbose` property controls the logging level.  Lower numbers like `1` mean that it will only log when alerts fire, whereas `2` and `3` are increasingly verbose, meaning that LogAlert will emit additional information about what is happening.  See [Logging](#logging) below for more details.
 
@@ -296,7 +299,7 @@ For monitoring single files, you need to specify the full filesystem path to the
 "path": "/home/jsmith/files/mylog.txt"
 ```
 
-For Microsoft Windows you must use this syntax:
+For Microsoft Windows you need to use this syntax:
 
 ```json
 "path": "c:\\Users\\MyUser\\MyFiles\\MyLog.txt"
@@ -334,14 +337,14 @@ This would trigger an alert when the keyword `ALERT` appeared in the monitored f
 
 ### Regular Expressions
 
-You can optionally instruct LogAlert to match using a [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions).  This is a special syntax that allows you to define complex matching behavior, and goes beyond simple string matching.  To use this, you need to define an additional `regexp` property and set it to `true`.  Example:
+You can optionally instruct LogAlert to match using a [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions).  This is a special syntax that allows you to define complex matching behavior, which goes beyond simple string matching.  To use this, you need to define an additional `regexp` property and set it to `true`.  Example:
 
 ```json
 "match": "ALERT|WARNING",
 "regexp": true
 ```
 
-In this case the regular expression is defining an OR match, meaning it would match either `ALERT` or `WARNING`.  See the [MDN guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for more details on how to format regular expressions.
+In this case the regular expression is defining an OR (`|`) match, meaning it would match either `ALERT` or `WARNING`.  See the [MDN guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for more details on how to format regular expressions.
 
 ### Match Modes
 
@@ -355,7 +358,7 @@ The difference here is that with `whole` mode, when a file change is detected (e
 
 #### Checksums
 
-When using `whole` mode (see above), LogAlert has an optional feature which can compute a checksum (i.e. a fingerprint) of your file's contents, and only act if the checksum has changed.  This is useful when you have a system that is continually rewriting files on disk (causing their modification dates to update, and thereby registering a change), but the actual file content isn't changing.  Using checksum mode, this means that LogAlert will only re-scan the file for alerts if the actual content of the file has changed.  To use this feature, add a `checksum` property to your monitor, and set it to `true`.  Example:
+When using `whole` mode (see above), LogAlert has an optional feature which can compute a checksum (i.e. a fingerprint) of your file's contents, and only act if the checksum has changed.  This is useful when you have a system that is continually rewriting files on disk (causing their modification dates to update, and thereby registering a change), but the actual file content isn't changing.  Using checksum mode, LogAlert will only re-scan the file for alerts if the actual content of the file has changed.  To use this feature, add a `checksum` property to your monitor, and set it to `true`.  Example:
 
 ```json
 "mode": "whole",
@@ -380,7 +383,7 @@ This property must be configured per each monitor.
 
 ### Max Alerts Per Hour
 
-You can also limit the maximum number of alerts to allow per hour.  This is a great way to manage flood control, as you can set this to a very low number, as low as `1` per hour.  Then, after the first alert, whatever else happens during the hour, it will **not** send out another, even if the file blows up.  To use this feature, include a `max_per_hour` property, and set it to the maximum number of alerts you want to allow per hour:
+You can also limit the maximum number of alerts to allow per hour.  This is a great way to manage flood control, as you can set this to a very low number, as low as `1` per hour.  Then, after the first alert, whatever else happens during the hour, it will **not** send out another alert, even if the file blows up.  To use this feature, include a `max_per_hour` property, and set it to the maximum number of alerts you want to allow per hour:
 
 ```json
 "max_per_hour": 3
@@ -577,7 +580,7 @@ Notice that you can configure multiple actions per alert.  In the above example,
 
 # Logging
 
-LogAlert keeps its own log file, which contains a copy of everything echoed to the console (Terminal window).  By default, this log file is created in the same directory as the LogAlert binary, and is named `log.txt`.  Here is an example log snippet:
+LogAlert keeps its own log file, which contains a copy of everything echoed to the console (Terminal window).  By default, this log file is created in the same directory as the LogAlert executable, and is named `log.txt`.  Here is an example log snippet:
 
 ```
 [2020-09-13 17:12:57][LogAlert][LogAlert/1.0.0 starting up][]
@@ -587,17 +590,17 @@ LogAlert keeps its own log file, which contains a copy of everything echoed to t
 [2020-09-13 17:13:07][Test Monitor][ALERT! Found 2 matching lines in: /Users/jhuckaby/git/logalert/test.txt][["Hello ALERT!","Here's another ALERT."]]
 ```
 
-The top-level `verbose` property in your `config.json` controls how verbose the output (and thus the log file is).  A `verbose` level of `1` is the most quiet, and only contains triggered alerts.  A level of `2` is a bit louder, and level `3` is the loudest.  Use these higher levels for troubleshooting issues.
+The top-level `verbose` property in your `config.json` controls how verbose the console output and the log file are.  A `verbose` level of `1` is the most quiet, and only contains triggered alerts.  A level of `2` is a bit louder, and level `3` is the loudest.  Use these higher levels for troubleshooting issues.
 
 You can customize the location and filename of the log file by including a top-level `log_file` property in your `config.json` file, and setting it to a fully-qualified filesystem path.
 
-You can also optionally customize the log "columns" that are written out.  By default, the following four columns are written:
+You can also optionally customize the log "columns" that are written out.  By default, the following four columns are written for each row:
 
 ```
 [date][component][msg][data]
 ```
 
-The following columns are available:
+Here are all the log columns available:
 
 | Log Column | Description |
 |------------|-------------|
@@ -609,7 +612,7 @@ The following columns are available:
 | `component` | This is the name of the current monitor, or simply `LogAlert` for generic messages. |
 | `code` | This is the log level of the message, from `1` to `3`. |
 | `msg` | This is the message text itself. |
-| `data` | Any additional data that accompanies the message will be here. |
+| `data` | Any additional data that accompanies the message will be in this column. |
 
 To customize the log columns, include a top-level `log_columns` property in your `config.json` file, and set it to an array of strings, where each string specifies the column.  Example:
 
