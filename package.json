@@ -1,6 +1,6 @@
 {
 	"name": "logalert",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Monitor logs and send alerts on specific changes.",
 	"author": "Joseph Huckaby <jhuckaby@gmail.com>",
 	"homepage": "https://github.com/jhuckaby/logalert",
@@ -18,7 +18,7 @@
 		"monitor"
 	],
 	"scripts": {
-		"package": "mkdir -p dist && pkg --targets node16-linux-x64,node16-macos-x64,node16-win-x64 --out-path dist .",
+		"package": "mkdir -p dist && pkg --targets node18-linux-x64,node18-linux-arm64,node18-macos-x64,node18-macos-arm64,node18-win-x64,node18-win-arm64 --out-path dist .",
 		"boot": "pixl-boot install --script index.js",
 		"unboot": "pixl-boot uninstall",
 		"start": "node index.js start",
@@ -33,6 +33,6 @@
 		"pixl-request": "^1.0.31"
 	},
 	"devDependencies": {
-		"pkg": "5.4.1"
+		"pkg": "5.8.1"
 	}
 }

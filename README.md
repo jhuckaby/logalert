@@ -60,12 +60,22 @@ The easiest way to install LogAlert is to use one of our precompiled binaries.  
 
 ```
 mkdir /opt/logalert
-curl -L https://github.com/jhuckaby/logalert/releases/latest/download/logalert-linux > /opt/logalert/logalert.bin
+curl -L https://github.com/jhuckaby/logalert/releases/latest/download/logalert-linux-x64 > /opt/logalert/logalert.bin
 chmod 755 /opt/logalert/logalert.bin
 /opt/logalert/logalert.bin
 ```
 
-The `linux` binary should work on any 64-bit Linux OS, including RedHat/CentOS and Debian/Ubuntu.  If you are installing on macOS, replace `linux` with `macos` in the URL.  On first run a sample configuration file is created for you.
+The `logalert-linux-x64` binary should work on any 64-bit Linux OS with x64 architecture, including RedHat/CentOS and Debian/Ubuntu.  If you are installing on ARM, use `logalert-linux-arm64` instead.  The two URLs are:
+
+- https://github.com/jhuckaby/logalert/releases/latest/download/logalert-linux-x64
+- https://github.com/jhuckaby/logalert/releases/latest/download/logalert-linux-arm64
+
+If you are installing on macOS, replace `linux` with `macos` in the URL.  Make sure to find out if your Mac uses x64 (Intel) or ARM (Apple Silicon) architecture, as the URLs are different:
+
+- https://github.com/jhuckaby/logalert/releases/latest/download/logalert-macos-x64
+- https://github.com/jhuckaby/logalert/releases/latest/download/logalert-macos-arm64
+
+On first run a sample configuration file is created for you.
 
 Alternatively, if you already have [Node.js](https://nodejs.org/) on your server, you can install LogAlert via [npm](https://www.npmjs.com/) like this:
 
@@ -89,9 +99,10 @@ sudo logalert start
 
 <details><summary><strong>Microsoft Windows</strong></summary>
 
-To install LogAlert on Microsoft Windows, please download our precompiled binary executable (EXE):
+To install LogAlert on Microsoft Windows, please download our precompiled binary executable (EXE) for your specific architecture:
 
-https://github.com/jhuckaby/logalert/releases/latest/download/logalert-win.exe
+- https://github.com/jhuckaby/logalert/releases/latest/download/logalert-win-x64.exe
+- https://github.com/jhuckaby/logalert/releases/latest/download/logalert-win-arm64.exe
 
 It is highly recommended that you create a dedicated folder for this, as it writes a couple of companion files alongside the executable.  Example location:
 
